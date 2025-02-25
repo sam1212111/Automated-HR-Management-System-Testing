@@ -1,0 +1,99 @@
+   package NavigatePage.com;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.time.Duration;
+
+public class Frugal {
+
+    public static void main(String[] args) {
+        // Initialize the WebDriver
+        WebDriver driver = new EdgeDriver();
+        driver.manage().window().maximize();
+
+        driver.get("https://opensource-demo.orangehrmlive.com/web/index.php/auth/login");
+        System.out.println("URL: " + driver.getCurrentUrl());
+        System.out.println("Title: " + driver.getTitle());
+
+        // Create WebDriverWait instance
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(60));
+
+        // Step 2: Login (Wait for elements to be visible)
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.name("username"))).sendKeys("Admin");
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.name("password"))).sendKeys("admin123");
+        wait.until(ExpectedConditions.elementToBeClickable(By.className("oxd-button--main"))).click();
+
+        // Step 3: Wait for and click the "PIM" tab
+        wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//a[contains(@href, '/web/index.php/pim/viewPimModule')]"))).click();
+
+        // Step 4: Wait for and click the "Add Employee" link
+        wait.until(ExpectedConditions.elementToBeClickable(By.linkText("Add Employee"))).click();
+
+        // Step 5: Enter Employee Full Name (First Name, Middle Name, Last Name)
+        WebElement firstName = wait.until(ExpectedConditions.visibilityOfElementLocated(By.name("firstName")));
+        WebElement middleName = wait.until(ExpectedConditions.visibilityOfElementLocated(By.name("middleName")));
+        WebElement lastName = wait.until(ExpectedConditions.visibilityOfElementLocated(By.name("lastName")));
+
+        // Enter values into the fields
+        firstName.sendKeys("John");
+        middleName.sendKeys("Middle");
+        lastName.sendKeys("Doe");
+
+        // Click the checkbox to create login details
+        WebElement checkbox = wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("div.oxd-switch-wrapper input[type='checkbox']")));
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        js.executeScript("arguments[0].click();", checkbox);
+
+        // Locate and fill in the username field
+        WebElement usernameField = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@class='oxd-input oxd-input--active' and @autocomplete='off' and not(@type='password')]")));
+        usernameField.sendKeys("Ankit954");
+
+        // Locate and fill in the password field (first instance)
+        WebElement passwordField = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("(//input[@type='password'])[1]")));
+        passwordField.sendKeys("Pass123");  // Replace with the desired password
+
+        // Locate and fill in the confirm password field (second instance)
+        WebElement confirmPasswordField = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("(//input[@type='password'])[2]")));
+        confirmPasswordField.sendKeys("Pass123");  // Ensure it matches the first password
+
+        WebElement saveButton = wait.until(ExpectedConditions.elementToBeClickable(
+                By.cssSelector("button.oxd-button.oxd-button--medium.oxd-button--secondary.orangehrm-left-space")));
+        saveButton.click();
+
+        // Navigate to the "Admin" tab
+        WebElement adminTab = wait.until(ExpectedConditions.elementToBeClickable(
+                By.cssSelector("span.oxd-text.oxd-text--span.oxd-main-menu-item--name")));
+        adminTab.click();
+
+        // Click on "User Management" to open the dropdown using JavaScript
+        WebElement userManagementTab = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//span[contains(@class, 'oxd-topbar-body-nav-tab-item') and contains(text(), 'User Management')]")));
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", userManagementTab);
+
+        // Wait for and click the "Users" link in the dropdown using JavaScript
+        WebElement usersOption = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//a[@role='menuitem' and contains(@class, 'oxd-topbar-body-nav-tab-link') and text()='Users']")));
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", usersOption);
+
+        // Wait for the "Add" button to become clickable, then click it
+        WebElement addButton = wait.until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//button[contains(@class, 'oxd-button--secondary') and contains(., 'Add')]")));
+        addButton.click();
+
+        // Wait for the dropdown to be visible and click on it
+        WebElement dropdown = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("div.oxd-select-text-input")));
+        dropdown.click();  // Open the dropdown
+
+        // Wait for the "Admin" option to be visible and clickable
+        WebElement adminOption = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//div[@class='oxd-select-dropdown']//span[text()='Admin']")));
+
+        
+    }
+}
